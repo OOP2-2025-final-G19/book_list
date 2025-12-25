@@ -1,0 +1,64 @@
+<!-- templates/partials/linegraph.html -->
+
+<h2>平均点 推移折れ線グラフ</h2>
+
+{% for subject, data in linegraphs.items() %}
+<canvas id="line-chart"></canvas>
+
+<script>
+  (function() {
+    const ctx = document.getElementById("line-chart").getContext("2d");
+
+    // 各科目の色を定義（科目が増えても対応できるよう配列で用意）
+    const colors = [
+        'rgba(75, 192, 192, 1)',   // 1色目
+        'rgba(255, 99, 132, 1)',   // 2色目
+        'rgba(54, 162, 235, 1)',   // 3色目
+    ];
+
+    // datasets 配列を動的に作成
+    const allDatasets = [
+      {% for subject, data in linegraphs.items() %}
+      {
+        label: '{{ subject }}',
+        data: {{ data['values'] | tojson }},
+        borderColor: colors[{{ loop.index0 }} % colors.length],
+        backgroundColor: 'rgba(0, 0, 0, 0)', // 背景は透明
+        tension: 0,
+        fill: false
+      }{% if not loop.last %},{% endif %}
+      {% endfor %}
+    ];
+
+    // X軸のラベル（1月〜12月）は最初のデータセットから取得
+    const labels = {{ (linegraphs.values() | list)[0]['labels'] | tojson if linegraphs else [] }};
+
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: allDatasets
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            display: true,
+            position: 'top'
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            suggestedMax: 100,
+            title: {
+              display: true,
+              text: '平均点'
+            }
+          }
+        }
+      }
+    });
+  })();
+</script>
+{% endfor %}

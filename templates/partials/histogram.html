@@ -1,0 +1,36 @@
+<h2>科目別 成績ヒストグラム（{{ current_month }}月）</h2>
+
+<div class="histogram-area">
+{% for subject, data in histograms.items() %}
+  <div class="histogram-item">
+    <h3>{{ subject }}</h3>
+    <canvas id="hist-{{ loop.index }}"></canvas>
+
+    <script>
+      const ctx{{ loop.index }} = document
+        .getElementById('hist-{{ loop.index }}')
+        .getContext('2d');
+
+      new Chart(ctx{{ loop.index }}, {
+        type: 'bar',
+        data: {
+          labels: {{ labels | tojson }},
+          datasets: [{
+            label: '{{ subject }}',
+            data: {{ data | tojson }},
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: { stepSize: 1 }
+            }
+          }
+        }
+      });
+    </script>
+  </div>
+{% endfor %}
+</div>

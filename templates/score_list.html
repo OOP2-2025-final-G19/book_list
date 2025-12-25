@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>データ一覧</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='base-style.css') }}">
+</head>
+
+<body>
+    <h1>{{ title }}</h1>
+    <ul class="breadcrumb">
+        <li><a href="{{ url_for('index') }}">HOME</a></li>
+        <li><a href="{{ url_for('score.list') }}">成績一覧</a></li>
+    </ul>
+
+    <a href="{{ url_for('score.add') }}">新規成績追加</a>
+    <table>
+        <thead>
+            <tr>
+                <th>&nbsp;</th>
+                <th>生徒</th>
+                <th>科目</th>
+                <th>点数</th>
+                <th>実施月</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for score in items %}
+            <tr>
+                <td><a href="{{ url_for('score.edit', score_id=score.id) }}">編集</a></td>
+                <td>{{ score.user.name }}</td>
+                <td>{{ score.subject.name }}</td>
+                <td>{{ score.value }}</td>
+                <td>{{ score.month }}月</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+
+</html>
