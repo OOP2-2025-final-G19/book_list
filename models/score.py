@@ -4,9 +4,9 @@ from .user import User
 from .subject import Subject
 
 class Score(Model):
-    user = ForeignKeyField(User, backref='scores')
-    subject = ForeignKeyField(Subject, backref='scores')
-    value = IntegerField()
+    user = CharField()
+    author = CharField()
+    day = IntegerField()
     month = IntegerField()
 
     class Meta:
