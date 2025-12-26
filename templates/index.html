@@ -2,22 +2,20 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>成績管理システム</title>
+  <title>読書管理システム</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='base-style.css') }}">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
-  <h1>成績管理システム</h1>
+  <h1>読書管理システム</h1>
 
   <ul>
-    <li><a href="{{ url_for('user.list') }}">学生</a></li>
-    <li><a href="{{ url_for('subject.list') }}">科目</a></li>
-    <li><a href="{{ url_for('score.list') }}">成績</a></li>
+    <li><a href="{{ url_for('registration.add') }}">登録</a></li>
+
   </ul>
 
-  {% include 'partials/histogram.html' %}
-  {% include 'partials/linegraph.html' %}
+
 
 </body>
 </html>

@@ -1,0 +1,48 @@
+<!--これはデータ登録確認のテスト用-->
+<!--URLで[https://localhost:8080/books/]と入力することでデータ登録ができているのか確認することができる-->
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>書籍一覧(テスト用)</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='base-style.css') }}">
+</head>
+
+<body>
+    <h1>{{ title }}</h1>
+    <ul class="breadcrumb">
+        <li><a href="{{ url_for('index') }}">HOME</a></li>
+        <li><a href="{{ url_for('registration.list') }}">書籍一覧</a></li>
+    </ul>
+
+    <a href="{{ url_for('registration.add') }}">新規書籍追加</a>
+    <table>
+        <thead>
+            <tr>
+                <th>タイトル</th>
+                <th>著者</th>
+                <th>登録日</th>
+                <th>評価</th>
+                <th>備考</th>
+                <th>読書状況</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for registration in items %}
+            <!--Flaskから渡されたデータを一つずつ表示している-->
+            <tr>
+                
+                <td>{{ registration.title }}</td>
+                <td>{{ registration.author }}</td>
+                <td>{{ registration.day }}</td>
+                <td>{{ registration.review }}</td>
+                <td>{{ registration.thoughts }}</td>
+                <td>{{ registration.is_read }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+
+</html>
