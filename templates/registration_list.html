@@ -35,7 +35,8 @@
                 
                 <td>{{ registration.title }}</td>
                 <td>{{ registration.author }}</td>
-                <td>{{ registration.day }}</td>
+                <td>{{ registration.day.strftime('%Y/%m/%d') }}</td> 
+                <!--strftime('%Y/%m/%d')によって日付を文字列にしている-->
                 <td>{{ registration.review }}</td>
                 <td>{{ registration.thoughts }}</td>
                 <td>{{ registration.is_read }}</td>

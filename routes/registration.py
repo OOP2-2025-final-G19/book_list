@@ -19,7 +19,11 @@ def add():
     if request.method == 'POST':
         title = request.form['title']
         author = request.form['author']
-        day = request.form['day']
+        day_str = request.form['day']
+        day = datetime.strptime(day_str, '%Y-%m-%d').date()
+        # datetime.strptime(day_str, '%Y/%m/%d').date()
+        # pythonのdatetimeクラスのstrptimeを使用することで文字列を日付にしている
+        #.date()とすることで日付のみ取り出す
         review = request.form['review']
         thoughts = request.form['thoughts']
         is_read = bool(request.form.get('is_read')) 
