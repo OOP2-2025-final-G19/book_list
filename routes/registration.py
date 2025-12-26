@@ -10,7 +10,7 @@ registration_bp = Blueprint('registration', __name__, url_prefix='/books')
 def list():
     books = Registration.select()
     return render_template('registration_list.html', title='書籍一覧(テスト用)', items=books)
-    # URLでhttps://localhost:8080/books/と入力することでデータ登録ができているのか確認することができる
+    # URLでhttp://localhost:8080/books/と入力することでデータ登録ができているのか確認することができる
 
 
 @registration_bp.route('/add', methods=['GET', 'POST'])
