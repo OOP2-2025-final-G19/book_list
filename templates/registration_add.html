@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>書籍追加</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='base-style.css') }}">
+</head>
+
+<body>
+    <h1>新規書籍追加</h1>
+    <ul class="breadcrumb">
+        <li><a href="{{ url_for('index') }}">HOME</a></li>
+        <li><a href="{{ url_for('registration.list') }}">書籍一覧</a></li>
+    </ul>
+
+    <form action="{{ url_for('registration.add') }}" method="post">
+        <label>タイトル:
+            <input type="text" name="title" required>
+            <!--属性はtext、名前はtitle、必須-->
+        </label><br>
+        <label>著者:
+            <input type="text" name="author" required>
+            <!--属性はtext、名前はauthor、必須-->
+        </label><br>
+        <label>登録日:
+            <input type="date" name="day" required>
+            <!--属性はdate、名前はday、必須-->
+        </label><br>
+        <label>評価:
+            <input type="number" name="review" min="0" max="5" required>
+            <!--属性はnumber、名前review、必須-->
+        </label><br>
+        <label>備考:
+            <input type="text" name="thoughts" required>
+            <!--属性はtext、名前はthoughts、必須-->
+        </label><br>
+        <label>読書状況:
+            <input type="checkbox" name="is_read" >
+             <!--requiredがないことで必須入力ではなくなる-->
+             <!--属性はcheckbox、名前はis_read、任意-->
+             <!--on又はNoneを送っている-->
+        </label><br>
+        <button type="submit">登録</button>
+    </form>
+</body>
+
+</html>
