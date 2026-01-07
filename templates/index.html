@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8">
   <title>読書管理システム</title>
@@ -11,11 +12,10 @@
   <h1>読書管理システム</h1>
 
   <ul>
-    <li><a href="{{ url_for('registration.add') }}">登録</a></li>
-
+    <li><a href="{{ url_for('registration.add') }}">書籍登録</a></li>
+    <li><a href="{{ url_for('registration.read_list') }}">読了済みリスト</a></li>
   </ul>
 
-
-
 </body>
+
 </html>
