@@ -12,6 +12,38 @@ def list():
     return render_template('registration_list.html', title='書籍一覧(テスト用)', items=books)
     # URLでhttp://localhost:8080/books/と入力することでデータ登録ができているのか確認することができる
 
+# book_list/routes/registration.py に追加
+
+@registration_bp.route('/unread')
+def unread_list():
+    sort = request.args.get('sort', 'day')  # デフォルトは登録日順
+    order = request.args.get('order', 'desc') # デフォルトは降順
+
+    # ソート対象の対応表
+    sort_columns = {
+        'title': Registration.title,
+        'author': Registration.author,
+        'day': Registration.day,
+        'review': Registration.review,
+    }
+
+    # is_read が False（未読）のもののみを抽出
+    query = Registration.select().where(Registration.is_read == False)
+
+    if sort in sort_columns:
+        if order == 'asc':
+            query = query.order_by(sort_columns[sort].asc())
+        else:
+            query = query.order_by(sort_columns[sort].desc())
+
+    return render_template(
+        'registration_unread_list.html',
+        items=query,
+        sort=sort,
+        order=order,
+        title='未読リスト'
+    )
+
 
 @registration_bp.route('/add', methods=['GET', 'POST'])
 def add():

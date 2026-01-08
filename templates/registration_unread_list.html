@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>未読リスト</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='base-style.css') }}">
+</head>
+<body>
+    <h1>{{ title }}</h1> <ul class="breadcrumb">
+        <li><a href="{{ url_for('index') }}">HOME</a></li>
+        <li>未読リスト</li>
+    </ul>
+
+    <a href="{{ url_for('registration.add') }}">新規書籍追加</a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>
+                    <a href="{{ url_for('registration.unread_list', sort='title', order='asc' if sort == 'title' and order == 'desc' else 'desc') }}">
+                        書籍名 {% if sort == 'title' %}{{ '▲' if order == 'asc' else '▼' }}{% endif %}
+                    </a>
+                </th>
+                <th>
+                    <a href="{{ url_for('registration.unread_list', sort='author', order='asc' if sort == 'author' and order == 'desc' else 'desc') }}">
+                        著者 {% if sort == 'author' %}{{ '▲' if order == 'asc' else '▼' }}{% endif %}
+                    </a>
+                </th>
+                <th>
+                    <a href="{{ url_for('registration.unread_list', sort='day', order='asc' if sort == 'day' and order == 'desc' else 'desc') }}">
+                        登録日 {% if sort == 'day' %}{{ '▲' if order == 'asc' else '▼' }}{% endif %}
+                    </a>
+                </th>
+                <th>
+                    <a href="{{ url_for('registration.unread_list', sort='review', order='asc' if sort == 'day' and order == 'desc' else 'desc') }}">
+                        評価 {% if sort == 'review' %}{{ '▲' if order == 'asc' else '▼' }}{% endif %}
+                    </a>
+                </th>
+                <th>備考</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in items %} <tr>
+                <td>{{ book.title }}</td>
+                <td>{{ book.author }}</td>
+                <td>{{ book.day.strftime('%Y/%m/%d') }}</td> 
+                <td>{{ book.review }}</td>
+                <td>{{ book.thoughts }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
