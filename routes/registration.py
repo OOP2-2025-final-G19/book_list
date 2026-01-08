@@ -95,7 +95,7 @@ def unread_list():
         'registration_unread_list.html',
         items=query,
         sort=sort,
-        order=order
+        order=order,
         title='未読リスト'
     )
 
