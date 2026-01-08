@@ -42,3 +42,32 @@ def add():
         # submit後index.htmlに戻る
     
     return render_template('registration_add.html')
+
+@registration_bp.route('/read')
+def read_list():
+    sort = request.args.get('sort', 'day')  # ソート項目を入れる変数(デフォルトは登録日)
+    order = request.args.get('order', 'desc') # 昇順降順を入れる変数(デフォルトは降順)
+
+    # ソート対象の対応表（安全対策）
+    sort_columns = {
+        'title': Registration.title,
+        'author': Registration.author,
+        'day': Registration.day,
+        'review': Registration.review,
+    }
+
+    # is_read変数がtrueのもの(読了済みであるもの)のみを抽出する
+    query = Registration.select().where(Registration.is_read == True)
+
+    if sort in sort_columns:
+        if order == 'asc':
+            query = query.order_by(sort_columns[sort].asc())
+        else:
+            query = query.order_by(sort_columns[sort].desc())
+
+    return render_template(
+        'registration_read_list.html',
+        items=query,
+        sort=sort,
+        order=order
+    )
