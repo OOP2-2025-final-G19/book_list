@@ -1,0 +1,43 @@
+<h2>評価分布（ヒストグラム）</h2>
+
+<div class="histogram-area" style="display: flex; flex-wrap: wrap; gap: 20px;">
+{% for title, data in histograms.items() %}
+  <div class="histogram-item" style="flex: 1; min-width: 300px; max-width: 600px;">
+    <h3>{{ title }}</h3> <canvas id="hist-{{ loop.index }}"></canvas>
+
+    <script>
+      (function() {
+        const ctx = document.getElementById('hist-{{ loop.index }}').getContext('2d');
+        
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            // X軸ラベル（Python側から ['★1', '★2'...] を渡す想定）
+            labels: {{ labels | tojson }},
+            datasets: [{
+              label: '書籍数',
+              data: {{ data | tojson }}, // 各評価の冊数リスト [1, 5, 2...]
+              backgroundColor: 'rgba(75, 192, 192, 0.6)',
+              borderColor: 'rgba(75, 192, 192, 1)',
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false } // 単一データなので凡例は不要
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: { stepSize: 1 }, // 冊数なので整数表示
+                title: { display: true, text: '冊数' }
+              }
+            }
+          }
+        });
+      })();
+    </script>
+  </div>
+{% endfor %}
+</div>
