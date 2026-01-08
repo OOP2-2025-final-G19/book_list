@@ -42,7 +42,17 @@
              <!--on又はNoneを送っている-->
         </label><br>
         <button type="submit">登録</button>
+        <video id="camera" autoplay playsinline width="300"></video>
+        <br>
+        <button type="button" id="shoot">撮影</button>
+        <br>
+        <canvas id="canvas" width="300" height="200" style="display:none;"></canvas>
+
+        <input type="hidden" name="image_data" id="image_data">
     </form>
+    <script src="{{ url_for('static', filename='js/registration_camera.js') }}"></script>
+</body>
+
 </body>
 
 </html>

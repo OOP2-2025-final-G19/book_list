@@ -2,6 +2,10 @@ from flask import Blueprint, render_template, request, redirect, url_for, jsonif
 from models import Registration
 from datetime import datetime
 from peewee import *
+import base64
+import os
+import uuid
+
 
 # Blueprintの作成
 registration_bp = Blueprint('registration', __name__, url_prefix='/books')
@@ -14,20 +18,44 @@ def list():
 
 @registration_bp.route('/add', methods=['GET', 'POST'])
 def add():
-    
+
     if request.method == 'POST':
         title = request.form['title']
         author = request.form['author']
+
         day_str = request.form['day']
-        day = datetime.strptime(day_str, '%Y-%m-%d').date()
-        # datetime.strptime(day_str, '%Y/%m/%d').date()
-        # pythonのdatetimeクラスのstrptimeを使用することで文字列を日付にしている
-        #.date()とすることで日付のみ取り出す
+        day = datetime.strptime(day_str, '%Y-%m-%d')
+
         review = request.form['review']
         thoughts = request.form['thoughts']
-        is_read = bool(request.form.get('is_read')) 
-        #bool(request.form.get('is_read')とすることでチェックボックスにチェックがない時はfalseとして扱える
-        #request.form.get('is_read')はgetにすることで任意になり、()になるのは関数呼び出しであるため
+        is_read = bool(request.form.get('is_read'))
+
+        # ===== ここから画像処理 =====
+        image_data = request.form.get('image_data')
+        image_path = None
+
+        if image_data:
+            try:
+                # data:image/png;base64,xxxx の分離
+                header, encoded = image_data.split(",", 1)
+                binary = base64.b64decode(encoded)
+
+                # 保存先ディレクトリ
+                save_dir = "static/uploads"
+                os.makedirs(save_dir, exist_ok=True)
+
+                # ファイル名生成
+                filename = f"{uuid.uuid4()}.png"
+                image_path = f"{save_dir}/{filename}"
+
+                # ファイル保存
+                with open(image_path, "wb") as f:
+                    f.write(binary)
+
+            except Exception as e:
+                print("画像保存エラー:", e)
+                image_path = None
+        # ===== ここまで画像処理 =====
 
         Registration.create(
             title=title,
@@ -35,12 +63,14 @@ def add():
             day=day,
             review=review,
             thoughts=thoughts,
-            is_read=is_read
-        ) #行の追加
+            is_read=is_read,
+            image_path=image_path
+        )
+
         return redirect(url_for('registration.add'))
-        # submit後index.htmlに戻る
-    
+
     return render_template('registration_add.html')
+
 
 @registration_bp.route('/read')
 def read_list():
