@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, jsonify, abort
 from models import Registration
 from datetime import datetime
 from peewee import *
@@ -11,39 +11,6 @@ def list():
     books = Registration.select()
     return render_template('registration_list.html', title='書籍一覧(テスト用)', items=books)
     # URLでhttp://localhost:8080/books/と入力することでデータ登録ができているのか確認することができる
-
-# book_list/routes/registration.py に追加
-
-@registration_bp.route('/unread')
-def unread_list():
-    sort = request.args.get('sort', 'day')  # デフォルトは登録日順
-    order = request.args.get('order', 'desc') # デフォルトは降順
-
-    # ソート対象の対応表
-    sort_columns = {
-        'title': Registration.title,
-        'author': Registration.author,
-        'day': Registration.day,
-        'review': Registration.review,
-    }
-
-    # is_read が False（未読）のもののみを抽出
-    query = Registration.select().where(Registration.is_read == False)
-
-    if sort in sort_columns:
-        if order == 'asc':
-            query = query.order_by(sort_columns[sort].asc())
-        else:
-            query = query.order_by(sort_columns[sort].desc())
-
-    return render_template(
-        'registration_unread_list.html',
-        items=query,
-        sort=sort,
-        order=order,
-        title='未読リスト'
-    )
-
 
 @registration_bp.route('/add', methods=['GET', 'POST'])
 def add():
@@ -102,6 +69,34 @@ def read_list():
         items=query,
         sort=sort,
         order=order
+    )
+
+@registration_bp.route('/unread')
+def unread_list():
+    sort = request.args.get('sort', 'day')
+    order = request.args.get('order', 'desc')
+
+    sort_columns = {
+        'title': Registration.title,
+        'author': Registration.author,
+        'day': Registration.day,
+        'review': Registration.review,
+    }
+
+    query = Registration.select().where(Registration.is_read == False)
+
+    if sort in sort_columns:
+        if order == 'asc':
+            query = query.order_by(sort_columns[sort].asc())
+        else:
+            query = query.order_by(sort_columns[sort].desc())
+
+    return render_template(
+        'registration_unread_list.html',
+        items=query,
+        sort=sort,
+        order=order
+        title='未読リスト'
     )
 
 @registration_bp.route('/graphs')
@@ -188,3 +183,31 @@ def graphs():
                            linegraphs=linegraphs_data,
                            histograms=histograms_data,
                            labels=hist_labels)
+
+@registration_bp.route('/update/<int:id>', methods=['POST'])
+def update(id):
+    book = Registration.get_by_id(id)
+    data = request.get_json()
+
+    field = data.get('field')
+    value = data.get('value')
+
+    # 空欄チェック（共通）
+    if value is None or str(value).strip() == "":
+        abort(400, "空欄は許可されていません")
+
+    # 評価チェック
+    if field == 'review':
+        try:
+            value = int(value)
+        except ValueError:
+            abort(400)
+
+        if not (0 <= value <= 5):
+            abort(400, "評価は0〜5")
+
+    setattr(book, field, value)
+    book.save()
+
+    return jsonify({'status': 'ok'})
+

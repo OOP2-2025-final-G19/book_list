@@ -19,7 +19,6 @@
     <table>
         <thead>
             <tr>
-                <!--表の項目をクリックすると各項目をソートした表が表示されるURLに飛ぶ-->
                 <th>
                     <a href="{{ url_for(
                         'registration.read_list',
@@ -52,11 +51,7 @@
                     ) }}">
                         登録日
                         {% if sort == 'day' %}
-                        {% if order == 'asc' %}
-                        ▲
-                        {% else %}
-                        ▼
-                        {% endif %}
+                        {{ '▲' if order == 'asc' else '▼' }}
                         {% endif %}
                     </a>
                 </th>
@@ -79,11 +74,11 @@
         <tbody>
             {% for book in items %}
             <tr>
-                <td>{{ book.title }}</td>
-                <td>{{ book.author }}</td>
+                <td ondblclick="editCell(this, {{ book.id }}, 'title')">{{ book.title }}</td>
+                <td ondblclick="editCell(this, {{ book.id }}, 'author')">{{ book.author }}</td>
                 <td>{{ book.day.strftime('%Y/%m/%d') }}</td>
-                <td>{{ book.review }}</td>
-                <td>{{ book.thoughts }}</td>
+                <td ondblclick="editCell(this, {{ book.id }}, 'review')">{{ book.review }}</td>
+                <td ondblclick="editCell(this, {{ book.id }}, 'thoughts')">{{ book.thoughts }}</td>
             </tr>
             {% endfor %}
         </tbody>
@@ -91,3 +86,56 @@
 </body>
 
 </html>
+
+<script>
+    function editCell(td, bookId, field) {
+        const currentValue = td.innerText;
+
+        const input = document.createElement("input");
+
+        input.type = "text";
+        input.value = currentValue;
+        td.innerHTML = "";
+        td.appendChild(input);
+        input.focus();
+
+        input.onblur = () => {
+            const value = input.value.trim();
+
+            // 空欄チェック（共通）
+            if (value === "") {
+                alert("空欄にはできません");
+                td.innerText = currentValue;
+                return;
+            }
+
+            // 評価の範囲チェック
+            if (field === "review") {
+                const num = Number(value);
+                if (isNaN(num) || num < 0 || num > 5) {
+                    alert("評価は0〜5の範囲で入力してください");
+                    td.innerText = currentValue;
+                    return;
+                }
+            }
+
+            fetch(`/books/update/${bookId}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    field: field,
+                    value: value
+                })
+            }).then(res => {
+                if (!res.ok) {
+                    alert("更新に失敗しました");
+                    td.innerText = currentValue;
+                    return;
+                }
+                td.innerText = value;
+            });
+        };
+    }
+</script>
