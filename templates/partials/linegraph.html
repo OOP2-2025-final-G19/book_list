@@ -1,0 +1,68 @@
+<h2>月別 読書冊数推移（読了・未読別）</h2>
+
+<div style="width: 100%; max-width: 800px; margin: 0 auto;">
+    <canvas id="line-chart"></canvas>
+</div>
+
+<script>
+  (function() {
+    const ctx = document.getElementById("line-chart").getContext("2d");
+
+    // 色の定義（読了=青系, 未読=赤系 などを想定）
+    const colors = [
+        'rgba(54, 162, 235, 1)',   // 1色目（例: 読了）
+        'rgba(255, 99, 132, 1)',   // 2色目（例: 未読）
+    ];
+
+    // Pythonから渡された linegraphs 辞書を展開してデータセットを作成
+    const allDatasets = [
+      {% for status_label, data in linegraphs.items() %}
+      {
+        label: '{{ status_label }}', // "読了" や "未読" が入る
+        data: {{ data['values'] | tojson }}, // 冊数のリスト
+        borderColor: colors[{{ loop.index0 }} % colors.length],
+        backgroundColor: 'rgba(0, 0, 0, 0)',
+        tension: 0, // 少し曲線を滑らかに
+        fill: false
+      }{% if not loop.last %},{% endif %}
+      {% endfor %}
+    ];
+
+    // X軸ラベル（月）はデータが存在する場合のみ取得
+    // すべてのデータセットでX軸（月）が共通である前提
+    const labels = {{ (linegraphs.values() | list)[0]['labels'] | tojson if linegraphs else [] }};
+
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: allDatasets
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            display: true,
+            position: 'top'
+          },
+          tooltip: {
+            mode: 'index',
+            intersect: false,
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+                stepSize: 1 // 冊数なので整数表示
+            },
+            title: {
+              display: true,
+              text: '冊数'
+            }
+          }
+        }
+      }
+    });
+  })();
+</script>

@@ -1,0 +1,53 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>グラフページ</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='base-style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        .year-filter {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .year-btn {
+            display: inline-block;
+            padding: 8px 16px;
+            margin: 0 5px;
+            text-decoration: none;
+            color: #333;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+        .year-btn:hover {
+            background-color: #e0e0e0;
+        }
+        /* 選択されているボタンのデザイン */
+        .year-btn.active {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>グラフページ</h1>
+
+    <ul class="breadcrumb">
+        <li><a href="{{ url_for('index') }}">HOME</a></li>
+        <li><a href="{{ url_for('registration.graphs') }}">グラフページ</a></li>
+    </ul>
+
+    {% include 'partials/histogram.html' %}
+
+    {% for year in available_years %}
+        <a href="{{ url_for('registration.graphs', year=year) }}" 
+           class="year-btn {% if selected_year == year %}active{% endif %}">
+           {{ year }}年
+        </a>
+    {% endfor %}
+    {% include 'partials/linegraph.html' %}
+</body>
+</html>
