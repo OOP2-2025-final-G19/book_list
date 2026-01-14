@@ -2,6 +2,9 @@ from flask import Blueprint, render_template, request, redirect, url_for, jsonif
 from models import Registration
 from datetime import datetime
 from peewee import *
+import base64 # Base64を画像に戻すよう
+import os # フォルダ作成・パス操作用
+import uuid # 重複防止
 
 # Blueprintの作成
 registration_bp = Blueprint('registration', __name__, url_prefix='/books')
@@ -29,14 +32,36 @@ def add():
         #bool(request.form.get('is_read')とすることでチェックボックスにチェックがない時はfalseとして扱える
         #request.form.get('is_read')はgetにすることで任意になり、()になるのは関数呼び出しであるため
 
+        image_data=request.form.get('image_data')
+        image_path=None
+        if image_data:
+            try:
+                header, encoded = image_data.split(",", 1)#base64を,で分割している
+                binary = base64.b64decode(encoded)#再変換を行う
+                # 保存先ディレクトリ
+                save_dir = "static/uploads"#
+                os.makedirs(save_dir, exist_ok=True)#
+                # ファイル名生成
+                filename = f"{uuid.uuid4()}.png"
+                image_path = f"{save_dir}/{filename}"
+                # ファイル保存
+                with open(image_path, "wb") as f:
+                    f.write(binary)
+            except Exception as e:
+                print("画像保存エラー:", e)
+                image_path = None
+
+
+
         Registration.create(
             title=title,
             author=author,
             day=day,
             review=review,
             thoughts=thoughts,
-            is_read=is_read
-        ) #行の追加
+            is_read=is_read,
+            image_path=image_path
+        )#行の追加
         return redirect(url_for('registration.add'))
         # submit後index.htmlに戻る
     
