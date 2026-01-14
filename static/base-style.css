@@ -1,39 +1,253 @@
+@charset "UTF-8";
+
+/* =========================================
+   読書管理システム - デスク＆ブックテーマ
+   ========================================= */
+
 :root {
-  font-size: 14pt;
+  /* 机（背景）の色 */
+  --desk-color: #2c241b; 
+  --desk-texture: repeating-linear-gradient(
+    45deg,
+    #2c241b,
+    #2c241b 10px,
+    #352b20 10px,
+    #352b20 20px
+  );
+
+  /* 本（ページ）の色 */
+  --paper-bg: #fffbf0;
+  --paper-line: #e8e0d5; /* 罫線の色 */
+  
+  /* インク（文字）の色 */
+  --text-main: #2b2b2b;
+  --text-accent: #800000; /* 赤インク（アクセント） */
+  
+  /* 装飾 */
+  --spine-color: #5d4037; /* 背表紙の色 */
+  --shadow-color: rgba(0, 0, 0, 0.4);
+}
+
+html {
+  height: 100%;
+  /* 机のテクスチャ（木目風） */
+  background-color: var(--desk-color);
+  background-image: var(--desk-texture);
 }
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
-  margin: 2rem;
+  /* === 本の形状定義 === */
+  position: relative;
+  width: 90%;
+  max-width: 900px;
+  min-height: 85vh;
+  margin: 40px auto; /* 画面中央に配置 */
+  padding: 60px 80px 60px 100px; /* 左側は背表紙があるため広めに */
+  
+  /* 紙の質感 */
+  background-color: var(--paper-bg);
+  color: var(--text-main);
+  font-family: "Georgia", "Yu Mincho", "YuMincho", serif; /* 明朝体で活字っぽく */
+  
+  /* 本の厚みと影を表現 */
+  box-shadow: 
+    inset 20px 0 50px rgba(0,0,0,0.1), /* ページの湾曲（ノド） */
+    2px 2px 0 #e6e1d6, 
+    4px 4px 0 #dbd6cc, 
+    6px 6px 0 #d1ccc2, 
+    8px 8px 0 #c7c2b8, 
+    10px 10px 0 #bdb8ae, /* 紙の重なり */
+    15px 15px 30px var(--shadow-color); /* 机に落ちる影 */
+
+  border-radius: 4px 8px 8px 4px; /* 右側（小口）を少し丸く */
+  box-sizing: border-box;
 }
 
+/* === 左側の背表紙（バインディング） === */
+body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 60px; /* 背表紙の幅 */
+  background: linear-gradient(to right, #3e2723, #5d4037, #3e2723);
+  border-radius: 4px 0 0 4px;
+  border-right: 2px solid #281815;
+  box-shadow: inset 2px 0 5px rgba(255,255,255,0.1);
+  z-index: 2;
+}
+
+/* === コンテンツエリア === */
+
+/* 見出し */
+h1 {
+  font-size: 2.2rem;
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 30px;
+  color: var(--text-main);
+  border-bottom: 3px double var(--text-main);
+  padding-bottom: 10px;
+  font-feature-settings: "palt";
+  letter-spacing: 0.1em;
+}
+
+h2 {
+  font-size: 1.5rem;
+  border-bottom: 1px solid var(--text-accent);
+  color: var(--text-accent);
+  margin-top: 40px;
+  padding-left: 10px;
+}
+
+/* パンくずリスト（栞やメモ書き風） */
+.breadcrumb {
+  list-style: none;
+  padding: 0;
+  margin: -30px 0 30px 0;
+  text-align: right;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: #666;
+}
+.breadcrumb li { display: inline; }
+.breadcrumb li::after { content: " / "; color: #ccc; }
+.breadcrumb li:last-child::after { content: ""; }
+.breadcrumb a { color: inherit; text-decoration: none; border-bottom: 1px dotted #ccc;}
+
+/* リンク全般 */
+a {
+  color: var(--text-accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-bottom 0.3s;
+}
+a:hover {
+  border-bottom: 1px solid var(--text-accent);
+}
+
+/* =========================================
+   トップページ：目次（メニュー）のデザイン
+   ========================================= */
+.menu-list {
+    list-style: none;    /* リストの黒丸を消す */
+    padding: 0;
+    text-align: center;  /* 中央揃えにする */
+    margin-top: 50px;    /* 上の余白 */
+}
+
+.menu-list li {
+    margin-bottom: 30px; /* 項目ごとの間隔 */
+}
+
+.menu-list a {
+    font-size: 1.5rem;   /* ★ここで文字サイズを変更 (標準は1rem) */
+    font-weight: bold;   /* 太字にする */
+    display: inline-block;
+    color: var(--text-main);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: all 0.3s;
+}
+
+/* マウスを乗せたときのアニメーション */
+.menu-list a:hover {
+    color: var(--text-accent);
+    border-bottom: 1px solid var(--text-accent); /* 下線を引く */
+    transform: scale(1.1); /* 少し拡大する */
+}
+
+/* === テーブル（罫線表） === */
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 2rem;
-}
-
-th, td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
+  margin-top: 20px;
+  background: transparent;
 }
 
 th {
-  background-color: #f4f4f4;
+  border-bottom: 2px solid var(--text-main);
+  padding: 10px;
+  text-align: left;
+  font-weight: bold;
+  vertical-align: bottom;
 }
 
-.breadcrumb {
-  padding: 0;
-  margin-bottom: 2rem;
-  list-style: none;
+td {
+  padding: 12px 10px;
+  border-bottom: 1px solid var(--paper-line); /* ノートの罫線のような下線 */
+  vertical-align: top;
 }
-.breadcrumb li {
-  display: inline;
+
+tr:hover td {
+  background-color: rgba(255, 240, 200, 0.4); /* マーカーを引いたような色 */
 }
-.breadcrumb li::after {
-  content: " > ";
+
+/* === フォーム（書き込み欄） === */
+label {
+  display: block;
+  margin-top: 20px;
+  font-weight: bold;
+  color: #554;
 }
-.breadcrumb li:nth-last-child()::after {
-  content: "";
+
+input[type="text"],
+input[type="date"],
+input[type="number"],
+textarea,
+select {
+  width: 100%;
+  padding: 8px 0;
+  background-color: transparent;
+  border: none;
+  border-bottom: 2px solid #ccc; /* 下線のみ */
+  font-family: inherit;
+  font-size: 1.1rem;
+  color: var(--text-main);
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+input:focus, textarea:focus {
+  border-bottom: 2px solid var(--text-accent);
+  background-color: rgba(255,255,255,0.3);
+}
+
+/* ボタン（スタンプ風） */
+button, input[type="submit"], .year-btn {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 25px;
+  background-color: transparent;
+  color: var(--text-accent);
+  border: 2px solid var(--text-accent);
+  border-radius: 4px;
+  font-family: inherit;
+  font-weight: bold;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: all 0.2s;
+}
+
+button:hover, input[type="submit"]:hover, .year-btn:hover {
+  background-color: var(--text-accent);
+  color: #fff;
+}
+
+/* グラフエリア */
+canvas {
+  margin-top: 20px;
+  background-color: rgba(255,255,255,0.4);
+  border: 1px dashed #ccc;
+  padding: 10px;
+}
+
+/* 写真表示（ポラロイド風） */
+img {
+  padding: 10px 10px 30px 10px;
+  background-color: #fff;
+  box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+  transform: rotate(-2deg);
+  border: 1px solid #ddd;
 }
