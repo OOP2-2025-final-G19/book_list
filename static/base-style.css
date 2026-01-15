@@ -29,10 +29,13 @@
 }
 
 html {
-  height: 100%;
+  min-height: 100%;
   /* 机のテクスチャ（木目風） */
   background-color: var(--desk-color);
   background-image: var(--desk-texture);
+
+  box-sizing: border-box;
+  padding-bottom: 40px;
 }
 
 body {
@@ -41,7 +44,7 @@ body {
   width: 90%;
   max-width: 900px;
   min-height: 85vh;
-  margin: 40px auto; /* 画面中央に配置 */
+  margin: 40px auto 40px; /* 画面中央に配置 */
   padding: 60px 80px 60px 100px; /* 左側は背表紙があるため広めに */
   
   /* 紙の質感 */
