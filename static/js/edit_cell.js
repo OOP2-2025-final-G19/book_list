@@ -23,8 +23,8 @@ function editCell(td, bookId, field) {
         // 評価チェック
         if (field === "review") {
             const num = Number(value);
-            if (!Number.isInteger(num) || num < 0 || num > 5) {
-                alert("評価は0〜5の整数で入力してください");
+            if (!Number.isInteger(num) || num < 1 || num > 5) {
+                alert("評価は1〜5の整数で入力してください");
                 td.innerText = currentValue;
                 return;
             }
