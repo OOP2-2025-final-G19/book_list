@@ -10,24 +10,29 @@
 * **読書の可視化**: Chart.jsを利用し、登録データを視覚的に分析可能です。
 * **柔軟なソート機能**: 読了リストでは、複数の項目での並び替えに対応しています。
 
-![デモ動画](./gif/play_demo.gif) 
+<img src="./gif/play_demo.gif" width="1000">
 
 ## 主なページと機能
 
-|Topページ|書籍登録ページ|
-|-|-|
-|![top](./images/Top.png)|![add](./gif/registration.gif)|
-|tmp|tmp|
 
-|読了一覧ページ|未読一覧ページ|
-|-|-|
-|![true](./gif/list.gif)|![false](./images/false.png)|
-|tmp|tmp|
 
-|グラフページ|
-|-|
-|![graph](./images/graph.png)
-|tmp|
+| Topページ | 書籍登録ページ |
+|-----------|----------------|
+| <img src="./images/Top.png" width="500"> | <img src="./gif/registration.gif" width="500"> |
+| tmp | tmp |
+
+
+| 読了一覧ページ | 未読一覧ページ |
+|----------------|----------------|
+| <img src="./gif/list.gif" width="500"> | <img src="./images/false.png" width="500" height="300"> |
+| tmp | tmp |
+
+
+| グラフページ |
+|-------------|
+| <img src="./images/graph.png" width="500"> |
+| tmp |
+
 
 
 
@@ -41,7 +46,6 @@
 * **Flask**: Webフレームワーク
 * **Peewee**: ORM
 
-## 使い方
 ## 開発者問い合わせ先
 
 |担当者(Githubアカウント)|役割|
@@ -52,6 +56,7 @@
 |natsumeg77|読了リスト表示機能|
 |kinoko-1015|グラフ、デザインの作成|
 
+## 使い方
 
 ### 1. ライブラリのインストール
 ```bash
@@ -65,6 +70,8 @@ pip install flask peewee
 ※カメラを許可しないと、アプリ内の撮影機能が正常に動作しません。
 
 ![設定デモ](./gif/demo_first.gif)
+
+
 
 ### 3.書籍の登録手順
 1.「書籍追加」画面に移動し、タイトル・著者・評価・備考などの必要事項を入力します。  
