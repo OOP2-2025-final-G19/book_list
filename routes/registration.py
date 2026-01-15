@@ -71,6 +71,7 @@ def add():
 def read_list():
     sort = request.args.get('sort', 'day')  # ソート項目を入れる変数(デフォルトは登録日)
     order = request.args.get('order', 'desc') # 昇順降順を入れる変数(デフォルトは降順)
+    keyword = request.args.get('q', '').strip() # 検索ワードを入れる
 
     # ソート対象の対応表（安全対策）
     sort_columns = {
@@ -83,6 +84,10 @@ def read_list():
     # is_read変数がtrueのもの(読了済みであるもの)のみを抽出する
     query = Registration.select().where(Registration.is_read == True)
 
+    # 検索条件追加
+    if keyword:
+        query = query.where(Registration.title.contains(keyword))
+
     if sort in sort_columns:
         if order == 'asc':
             query = query.order_by(sort_columns[sort].asc())
@@ -93,13 +98,15 @@ def read_list():
         'registration_read_list.html',
         items=query,
         sort=sort,
-        order=order
+        order=order,
+        keyword=keyword
     )
 
 @registration_bp.route('/unread')
 def unread_list():
     sort = request.args.get('sort', 'day')
     order = request.args.get('order', 'desc')
+    keyword = request.args.get('q', '').strip()
 
     sort_columns = {
         'title': Registration.title,
@@ -109,6 +116,9 @@ def unread_list():
     }
 
     query = Registration.select().where(Registration.is_read == False)
+
+    if keyword:
+        query = query.where(Registration.title.contains(keyword))
 
     if sort in sort_columns:
         if order == 'asc':
@@ -121,7 +131,7 @@ def unread_list():
         items=query,
         sort=sort,
         order=order,
-        title='未読リスト'
+        keyword=keyword
     )
 
 @registration_bp.route('/graphs')
