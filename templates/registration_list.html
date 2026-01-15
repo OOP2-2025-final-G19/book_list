@@ -10,6 +10,14 @@
 <body>
     <h1>{{ title }}</h1>
 
+<form method="GET" action="{{ url_for('registration.list') }}" style="margin-bottom: 20px;">
+    <input type="text" name="q" value="{{ q or '' }}" placeholder="タイトルや著者で検索">
+    <button type="submit">検索</button>
+    <a href="{{ url_for('registration.list') }}">クリア</a>
+</form>
+
+<ul class="breadcrumb">
+
     <ul class="breadcrumb">
         <li><a href="{{ url_for('index') }}">HOME</a></li>
         <li><a href="{{ url_for('registration.list') }}">書籍一覧</a></li>

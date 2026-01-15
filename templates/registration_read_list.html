@@ -8,7 +8,7 @@
 </head>
 
 <body>
-    <h1>{{ title }}</h1>
+    <h1>読了済みリスト</h1>
 
     <ul class="breadcrumb">
         <li><a href="{{ url_for('index') }}">HOME</a></li>
@@ -16,9 +16,12 @@
     </ul>
 
     <a href="{{ url_for('registration.add') }}">新規書籍追加</a>
+
     <table>
         <thead>
             <tr>
+                <th>写真</th>
+
                 <th>
                     <a href="{{ url_for(
                         'registration.read_list',
@@ -26,11 +29,9 @@
                         order='asc' if sort == 'title' and order == 'desc' else 'desc'
                     ) }}">
                         タイトル
-                        {% if sort == 'title' %}
-                        {{ '▲' if order == 'asc' else '▼' }}
-                        {% endif %}
                     </a>
                 </th>
+
                 <th>
                     <a href="{{ url_for(
                         'registration.read_list',
@@ -38,11 +39,9 @@
                         order='asc' if sort == 'author' and order == 'desc' else 'desc'
                     ) }}">
                         著者
-                        {% if sort == 'author' %}
-                        {{ '▲' if order == 'asc' else '▼' }}
-                        {% endif %}
                     </a>
                 </th>
+
                 <th>
                     <a href="{{ url_for(
                         'registration.read_list',
@@ -50,11 +49,9 @@
                         order='asc' if sort == 'day' and order == 'desc' else 'desc'
                     ) }}">
                         登録日
-                        {% if sort == 'day' %}
-                        {{ '▲' if order == 'asc' else '▼' }}
-                        {% endif %}
                     </a>
                 </th>
+
                 <th>
                     <a href="{{ url_for(
                         'registration.read_list',
@@ -62,28 +59,50 @@
                         order='asc' if sort == 'review' and order == 'desc' else 'desc'
                     ) }}">
                         評価
-                        {% if sort == 'review' %}
-                        {{ '▲' if order == 'asc' else '▼' }}
-                        {% endif %}
                     </a>
                 </th>
+
                 <th>備考</th>
             </tr>
         </thead>
 
         <tbody>
-            {% for book in items %}
+            {% for registration in items %}
             <tr>
-                <td ondblclick="editCell(this, {{ book.id }}, 'title')">{{ book.title }}</td>
-                <td ondblclick="editCell(this, {{ book.id }}, 'author')">{{ book.author }}</td>
-                <td>{{ book.day.strftime('%Y/%m/%d') }}</td>
-                <td ondblclick="editCell(this, {{ book.id }}, 'review')">{{ book.review }}</td>
-                <td ondblclick="editCell(this, {{ book.id }}, 'thoughts')">{{ book.thoughts }}</td>
+                <td>
+                    {% if registration.image_path %}
+                    <img src="{{ url_for('static', filename=registration.image_path.replace('static/', '')) }}"
+                        alt="書籍写真" width="100">
+                    {% else %}
+                    なし
+                    {% endif %}
+                </td>
+
+                <td ondblclick="editCell(this, {{ registration.id }}, 'title')">
+                    {{ registration.title }}
+                </td>
+
+                <td ondblclick="editCell(this, {{ registration.id }}, 'author')">
+                    {{ registration.author }}
+                </td>
+
+                <td>
+                    {{ registration.day.strftime('%Y/%m/%d') }}
+                </td>
+
+                <td ondblclick="editCell(this, {{ registration.id }}, 'review')">
+                    {{ registration.review }}
+                </td>
+
+                <td ondblclick="editCell(this, {{ registration.id }}, 'thoughts')">
+                    {{ registration.thoughts }}
+                </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-    <script src="{{ url_for('static', filename=js/edit_cell.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='js/edit_cell.js') }}"></script>
 </body>
 
 </html>

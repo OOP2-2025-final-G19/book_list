@@ -10,10 +10,21 @@ import uuid # 重複防止
 registration_bp = Blueprint('registration', __name__, url_prefix='/books')
 
 @registration_bp.route('/')
+@registration_bp.route('/')
 def list():
-    books = Registration.select()
-    return render_template('registration_list.html', title='書籍一覧(テスト用)', items=books)
-    # URLでhttp://localhost:8080/books/と入力することでデータ登録ができているのか確認することができる
+    # 検索クエリ 'q' を取得（デフォルトは空文字）
+    q = request.args.get('q', '')
+    
+    if q:
+        # タイトルまたは著者にキーワードが含まれるものを検索
+        books = Registration.select().where(
+            (Registration.title.contains(q)) | 
+            (Registration.author.contains(q))
+        )
+    else:
+        books = Registration.select()
+        
+    return render_template('registration_list.html', title='書籍一覧', items=books, q=q)
 
 @registration_bp.route('/add', methods=['GET', 'POST'])
 def add():
