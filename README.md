@@ -18,13 +18,13 @@
 
 | Topページ | 書籍登録ページ |
 |-----------|----------------|
-| <img src="./images/Top.png" width="500"> | <img src="./gif/registration.gif" width="500"> |
+| <img src="./images/Top.png" width="500"> | <img src="./gif/registration.gif" width="400"> |
 | tmp | tmp |
 
 
 | 読了一覧ページ | 未読一覧ページ |
 |----------------|----------------|
-| <img src="./gif/list.gif" width="500"> | <img src="./images/false.png" width="500" height="300"> |
+| <img src="./gif/list.gif" width="400"> | <img src="./images/false.png" width="500" height="300"> |
 | tmp | tmp |
 
 
