@@ -33,7 +33,7 @@
 
                 <th>
                     <a href="{{ url_for(
-                        'registration.read_list',
+                        'registration.unread_list',
                         sort='title',
                         order='asc' if sort == 'title' and order == 'desc' else 'desc'
                     ) }}">
@@ -46,7 +46,7 @@
 
                 <th>
                     <a href="{{ url_for(
-                        'registration.read_list',
+                        'registration.unread_list',
                         sort='author',
                         order='asc' if sort == 'author' and order == 'desc' else 'desc'
                     ) }}">
@@ -59,7 +59,7 @@
 
                 <th>
                     <a href="{{ url_for(
-                        'registration.read_list',
+                        'registration.unread_list',
                         sort='day',
                         order='asc' if sort == 'day' and order == 'desc' else 'desc'
                     ) }}">
@@ -72,7 +72,7 @@
 
                 <th>
                     <a href="{{ url_for(
-                        'registration.read_list',
+                        'registration.unread_list',
                         sort='review',
                         order='asc' if sort == 'review' and order == 'desc' else 'desc'
                     ) }}">
