@@ -10,18 +10,18 @@
 * **読書の可視化**: Chart.jsを利用し、登録データを視覚的に分析可能です。
 * **柔軟なソート機能**: 読了リストでは、複数の項目での並び替えに対応しています。
 
-![デモ動画]() 
+![デモ動画](./gif/play_demo.gif) 
 
 ## 主なページと機能
 
 |Topページ|書籍登録ページ|
 |-|-|
-|![top](./images/Top.png)|![add](./images/add.png)|
+|![top](./images/Top.png)|![add](./gif/registration.gif)|
 |tmp|tmp|
 
 |読了一覧ページ|未読一覧ページ|
 |-|-|
-|![true](./images/true.png)|![false](./images/false.png)|
+|![true](./gif/list.gif)|![false](./images/false.png)|
 |tmp|tmp|
 
 |グラフページ|
@@ -67,6 +67,6 @@ pip install flask peewee
 ![設定デモ](./gif/demo_first.gif)
 
 ### 3.書籍の登録手順
-1.「書籍追加」画面に移動し、タイトル・著者・評価などの必要事項を入力します。  
+1.「書籍追加」画面に移動し、タイトル・著者・評価・備考などの必要事項を入力します。  
 2.画面上の「撮影」ボタンを押し、カメラで書籍をキャプチャします。  
 3.内容を確認し、「登録」ボタンを押して保存します。  
