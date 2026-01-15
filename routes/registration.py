@@ -238,8 +238,8 @@ def update(id):
         except ValueError:
             abort(400)
 
-        if not (0 <= value <= 5):
-            abort(400, "評価は0〜5")
+        if not (1 <= value <= 5):
+            abort(400, "評価は1〜5")
 
     setattr(book, field, value)
     book.save()
