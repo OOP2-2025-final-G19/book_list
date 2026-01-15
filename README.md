@@ -30,7 +30,7 @@
 
 | グラフページ |
 |-------------|
-| <img src="./images/graph.png" width="500"> |
+| <img src="./images/graph.png" width="400"> |
 | tmp |
 
 
