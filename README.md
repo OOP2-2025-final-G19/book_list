@@ -105,21 +105,21 @@ pip install flask peewee
 ## ディレクトリ構造
 ```
 book_list/
-├── app.py
-├── models/
-│   ├── __init__.py 
-│   ├── db.py
-│   └── registration.py
-├── routes/
+├── app.py                 # Flaskアプリのエントリーポイント
+├── models/                # データベース関連
+│   ├── __init__.py        # DB初期化・モデル登録
+│   ├── db.py              # DB接続設定
+│   └── registration.py    # 書籍登録モデル
+├── routes/                # ルーティング
 │   ├── __init__.py
-│   └── registration.py
-├── static/
+│   └── registration.py    # 登録関連ルート
+├── static/                # 静的ファイル
 │   ├── base-style.css
 │   ├── js/
 │   │   ├── edit_cell.js
 │   │   └── registration_camera.js
-│   └── uploads/
-└── templates/
+│   └── uploads/           # 画像アップロード先
+└── templates/             # HTMLテンプレート
     ├── index.html
     ├── registration_add.html
     ├── registration_list.html
@@ -129,6 +129,7 @@ book_list/
     └── partials/
         ├── histogram.html
         └── linegraph.html
+
 
 
 ```
