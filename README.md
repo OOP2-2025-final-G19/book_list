@@ -100,3 +100,35 @@ pip install flask peewee
 1.「書籍追加」画面に移動し、タイトル・著者・評価・備考などの必要事項を入力します。  
 2.画面上の「撮影」ボタンを押し、カメラで書籍をキャプチャします。  
 3.内容を確認し、「登録」ボタンを押して保存します。  
+
+
+## ディレクトリ構造
+```
+book_list/
+├── app.py
+├── models/
+│   ├── __init__.py 
+│   ├── db.py
+│   └── registration.py
+├── routes/
+│   ├── __init__.py
+│   └── registration.py
+├── static/
+│   ├── base-style.css
+│   ├── js/
+│   │   ├── edit_cell.js
+│   │   └── registration_camera.js
+│   └── uploads/
+└── templates/
+    ├── index.html
+    ├── registration_add.html
+    ├── registration_list.html
+    ├── registration_read_list.html
+    ├── registration_unread_list.html
+    ├── graph_page.html
+    └── partials/
+        ├── histogram.html
+        └── linegraph.html
+
+
+```
